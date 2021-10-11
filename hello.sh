@@ -73,14 +73,89 @@ ISAY=${REPLACED2:0:START+3}
 
 echo $ISAY
 
+# loop 연습문제
+## In this exercise, you will need to loop through and print out all even numbers from the numbers list in the same order they are received. Don't print any numbers that come after 237 in the sequence.
+
+NUMBERS=(951 402 984 651 360 69 408 319 601 485 980 507 725 547 544 615 83 165 141 501 263 617 865 575 219 390 237 412 566 826 248 866 950 626 949 687 217 815 67 104 58 512 24 892 894 767 553 81 379 843 831 445 742 717 958 609 842 451 688 753 854 685 93 857 440 380 126 721 328 753 470 743 527)
+
+for N in ${NUMBERS[@]}; 
+do
+  if [ $N -eq 237 ]; then
+    break;
+  fi
+  if [[ $(($N % 2)) == 0 ]]; then
+    echo $N
+  fi
+done
+
+echo -e "\n\n\n\n"
 
 
+# Array Comparison 연습문제
+## In this exercise, you will need to compare three list of arrays and write the common elements of all the three arrays:
 
+a=(3 5 8 10 6)
+b=(6 5 4 12)
+c=(14 7 5 7) 
+# result is the common element 5.
 
+for x in ${a[@]};
+do
+  matched=false
+  
+  for y in ${b[@]};
+  do
+    if [ $x -eq $y ]; then
+      matched=true
+      break
+    fi
+  done
+   
+  if $matched; then
+    matched=false
 
+    for z in ${c[@]};
+    do
+      if [ $x -eq $z ]; then
+        matched=true
+        break
+      fi
+    done
+  fi
 
+  if $matched; then
+    echo ${x}
+  fi
+done
 
+echo -e "\n\n\n\n"
 
+# Functions
+function funcA {
+  echo $1 $2 $3 # arguments
+  echo "파라미터를 정의 하지 않는다."
+  echo "$(($1 + $2))"
+}
+
+funcA 1 2 3 # call function
+
+echo -e "\n\n\n\n"
+# Functions 연습문제
+## In this exercise, you will need to write a function called ENGLISH_CALC which can process sentences such as:
+
+## '3 plus 5', '5 minus 1' or '4 times 6' and print the results as: '3 + 5 = 8', '5 - 1 = 4' or '4 * 6 = 24' respectively.
+function ENGLISH_CALC() {
+  case $2 in
+    "plus") echo "$1 + $3 = $(($1 + $3))" ;;
+    "minus") echo "$1 - $3 = $(($1 - $3))" ;;
+    "times") echo "$1 * $3 = $(($1 * $3))" ;;
+  esac
+}
+
+## testing code
+ENGLISH_CALC 3 plus 5
+ENGLISH_CALC 5 minus 1
+ENGLISH_CALC 4 times 6
 
 
 

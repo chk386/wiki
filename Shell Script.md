@@ -1,5 +1,6 @@
 [#](#) Shell Script
 참고 : [learnshell](https://www.learnshell.org/)
+한글 참고 : [mus896님 github pages](https://mug896.github.io/bash-shell/index.html)
 ## HELLO
 ### 쉘이란?
 unix, linux운영체제에서 쓰이는 Interpret방식으로 동작하는 컴파일 되지 않은 프로그램이다. 쉘 스크립트(.sh)와prompt에서 다이렉트로 실행할수 있으며 한 라인을 읽어 해석하고 실행하는 과정을 반족하도록 만들어진 프로그래밍 언어이다.
@@ -160,7 +161,11 @@ fi
 ### Logical combinations
 ```bash
 if [[ $VAR_A[0] -eq 1 && ($VAR_B = "bee" || $VAR_T = "tee") ]] ; then
-    command...
+  echo "조건부 표현식은 더블 대괄호( [[]] )로 감싸야 한다."
+fi
+
+if boolean; then
+  echo "boolean일경우 대괄호를 쓰지 않는다."
 fi
 ```
 
@@ -175,8 +180,8 @@ case "$variable" in
     ;;
 esac
 ```
-GitGutterLineHighlightsEnable
-## simple case bash structure
+
+### simple case bash structure
 ```bash
 mycase=1
 case $mycase in
@@ -188,44 +193,168 @@ case $mycase in
 esac
 ```
 
+## Loops
+### bash for loop
+```bash
+for arg in [list]
+do
+  command(s)...
+done
+```
 
+```bash
+# loop on array member
+NAMES=(Joe Jenny Sara Tony)
+for N in ${NAMES[@]} ; do
+  echo "My name is $N"
+done
 
+# loop on command output results
+for f in $( ls prog.sh /etc/localtime ) ; do
+  echo "File is: $f"
+done
+```
 
+### bash while loop
+```bash
+# basic construct
+while [ condition ]
+do
+ command(s)...
+done
+```
 
+```bash
+COUNT=-9
+while [ $COUNT -gt 0 ]; do
+  echo "Value of count is: $COUNT"
+  COUNT=$(($COUNT - 1))
+done
+```
 
+### "break" and "continue" statements
+```bash
+# Prints out 0,1,2,3,4
 
+COUNT=0
+while [ $COUNT -ge 0 ]; do
+  echo "Value of COUNT is: $COUNT"
+  COUNT=$((COUNT+1))
+  if [ $COUNT -ge 5 ] ; then
+    break
+  fi
+done
 
+# Prints out only odd numbers - 1,3,5,7,9
+COUNT=0
+while [ $COUNT -lt 10 ]; do
+  COUNT=$((COUNT+1))
+  # Check if COUNT is even
+  if [ $(($COUNT % 2)) = 0 ] ; then
+    continue
+  fi
+  echo $COUNT
+done
+```
 
+## Array-Comparison
+```bash
+# basic construct
+# array=(value1 value2 ... valueN)
+array=(23 45 34 1 2 3)
+#To refer to a particular value (e.g. : to refer 3rd value)
+echo ${array[2]}
 
+#To refer to all the array values
+echo ${array[@]}
 
+#To evaluate the number of elements in an array
+echo ${#array[@]}
+```
 
+## Shell Functions
+```bash
+funcA {
+  echo $1 $2 $3 # arguments
+  echo "파라미터를 정의 하지 않는다."
+  echo "$(($1 + $2))"
+}
 
+funcA 1 2 3 # call function
 
+```
 
+## Special Variables
 
+| Valiable | Description                               |
+|----------|-------------------------------------------|
+| $0       | 현재 스크립트의 파일명                    |
+| $n       | n번째 인자                                |
+| $#       | 인자의 총 카운트                          |
+| $@       | 모든 인자들(배열)                         |
+| $*       | 모든 인자들(배열)                         |
+| $?       | 마지막 실행된 command의 종료 상태         |
+| $!       | 마지막 백그라운드 command의 프로세스 넘버 |
 
+### Example
+```bash
+#!/bin/bash
+echo "Script Name: $0"
+function func {
+    for var in $@
+    do
+        let i=i+1
+        echo "The \$${i} argument is: ${var}"
+    done
+    echo "Total count of arguments: $#"
+}
+func We are argument
+```
 
+```bash
+#!/bin/bash
+# $*는 배열의 길이가 1이고 한줄로 찍힘
+# $@는 배열의 길이가 3
+function func {
+    echo "--- \"\$*\""
+    for ARG in "$*"
+    do
+        echo $ARG
+    done
 
+    echo "--- \"\$@\""
+    for ARG in "$@"
+    do
+        echo $ARG
+    done
+}
+func We are argument
+```
 
+## Bash trap command
+스크립트에서 의도치 않는 것을 막기위해 특별한 신호, 인터럽트, 사용자 인풋를 캐치하길 원하는 상황이 종종 있다.
 
+Trap은 이것들을 시도하기 위한 명령이다.
+- trap <arg/function> <signal>
 
+### Example
+```bash
+#!/bin/bash
+# traptest.sh
+# notice you cannot make Ctrl-C work in this shell, 
+# try with your local one, also remeber to chmod +x 
+# your local .sh file so you can execute it!
 
+trap "echo Booh!" SIGINT SIGTERM
+echo "it's going to run until you hit Ctrl+Z"
+echo "hit Ctrl+C to be blown away!"
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+while true        
+do
+    sleep 60       
+done
+```
+[Signals Table](https://mug896.github.io/bash-shell/signals_table.html)
 
 
 
