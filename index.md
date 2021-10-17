@@ -1,11 +1,6 @@
- 위키 대문 
+# crazyPig's wiki~
+- [Shell Script](./shell/Shell Script)
+- [Regular Expression](./regex/regex.md)
 
-[Shell Script](Shell Script)
 
-[hi](hi)
 
-[hiasd](hiasd)
-
-[aiasd](aiasd)
-
-[id](id)

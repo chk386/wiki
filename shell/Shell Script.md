@@ -1,6 +1,6 @@
-[#](#) Shell Script
-참고 : [learnshell](https://www.learnshell.org/)
-한글 참고 : [mus896님 github pages](https://mug896.github.io/bash-shell/index.html)
+# Shell Script
+- 참고 : [learnshell](https://www.learnshell.org/)
+- 한글 참고 : [mus896님 github pages](https://mug896.github.io/bash-shell/index.html)
 ## HELLO
 ### 쉘이란?
 unix, linux운영체제에서 쓰이는 Interpret방식으로 동작하는 컴파일 되지 않은 프로그램이다. 쉘 스크립트(.sh)와prompt에서 다이렉트로 실행할수 있으며 한 라인을 읽어 해석하고 실행하는 과정을 반족하도록 만들어진 프로그래밍 언어이다.
@@ -355,6 +355,74 @@ do
 done
 ```
 [Signals Table](https://mug896.github.io/bash-shell/signals_table.html)
+
+
+## File Testing
+### use "-e" to test if file exist
+```bash
+#!/bin/bash
+filename="hello.sh"
+if [ -e "$filename" ]; then
+    echo "$filename exists as a file"
+fi
+```
+
+### use "-d" to test if directory exists
+```bash
+#!/bin/bash
+directory_name="./"
+if [ -d "$directory_name" ]; then
+    echo "$directory_name exists as a directory"
+fi
+```
+
+### use "-r" to test if file has read permission for the user running the script/test
+```bash
+#!/bin/bash
+filename="sample.md"
+if [ ! -f "$filename" ]; then
+    touch "$filename"
+fi
+if [ -r "$filename" ]; then
+    echo "you are allowed to read $filename"
+else
+    echo "you are not allowed to read $filename"
+fi
+```
+
+## pipeline
+보통 pipes라 불리는 파이프라인은 한 커맨드에서 다음 인풋으로 결과를 연결하고 커맨드들을 체이닝하기 위한 방법이다. 하나의 파이프라인은 pipe 케릭터(`|`)로 나타낸다. 복잡하거나 긴 입력이 한 커맨드에서 필요할 경우 특히 유용하다.
+
+```bash
+#/bin/bash
+ls / | wc -l
+ls / | head
+ls / | grep  # This will grab any line/file that has a matching pattern in it
+```
+
+## Process Substitution
+프로세스 대체는 하나의 프로세스의 인풋 또는 아웃풋이 파일명을 사용하여 참조 할 수 있다. 2가지 형태가 있으며 하나는 `output < (cmd)` 그리고 `input > (cmd)` 이다.
+
+```bash
+# Output
+sort file1 > sorted_file1
+sort file2 > sorted_file2
+diff sorted_file1 sorted_file2
+
+# 한줄로
+diff <(sort file1) <(sort file2)
+```
+
+```bash
+# input
+# 어플리케이션의 로그들을 한파일로 저장하고 동시에 콘솔에 출력해야 할 경우 tee명령어는 매우 유용하다.
+echo "Hello, world!" | tee a.txt
+
+# 이제 아웃풋은 대소문자를 유지하지만 파일에는 오직 소문자들만 가져가길 원한다. 프로세스 대체 방식으로 할수 있다.
+echo "Hello, world!" | tee >(tr '[:upper:]' '[:lower:]' > a.txt)
+```
+
+
 
 
 
